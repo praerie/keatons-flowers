@@ -1,3 +1,4 @@
+import maya.cmds as cmds
 import math
 import random
 
@@ -20,3 +21,20 @@ def fibonacci_sequence(n):
 def jitter(value, amount):
     """Add random noise to a value."""
     return value + random.uniform(-amount, amount)
+
+def convert_nurbs_to_poly(nurbs_obj, name=None, divisions=6):
+    """
+    Converts a NURBS surface to a polygon mesh.
+    Returns the poly object name.
+    """
+    poly = cmds.nurbsToPoly(
+        nurbs_obj,
+        mnd=1,  # quads
+        ch=False,
+        f=2,    # per span # of isoparms
+        pt=1,   # uniform parameterization
+        ut=divisions,
+        vt=divisions,
+        name=name or f"{nurbs_obj}_poly"
+    )[0]
+    return poly
